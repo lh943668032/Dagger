@@ -5,6 +5,7 @@ import com.ts.dagger.bean.D;
 import com.ts.dagger.debug.Debug;
 import com.ts.dagger.di.Dev;
 import com.ts.dagger.di.Release;
+import com.ts.dagger.presenter.IView;
 
 import javax.inject.Singleton;
 
@@ -13,6 +14,12 @@ import dagger.Provides;
 
 @Module
 public class UserModule {
+
+    public IView mIView;
+
+    public UserModule(IView iView){
+        mIView = iView;
+    }
 
     @Dev
     @Provides
@@ -34,6 +41,11 @@ public class UserModule {
     B providerB(){
         B b = new B();
         return b;
+    }
+
+    @Provides
+    IView providerIView(){
+        return mIView;
     }
 
 }

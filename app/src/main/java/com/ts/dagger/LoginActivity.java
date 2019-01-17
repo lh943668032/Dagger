@@ -17,12 +17,15 @@ import com.ts.dagger.di.Release;
 import com.ts.dagger.di.component.DaggerMainComponent;
 import com.ts.dagger.di.component.DaggerUserComponent;
 import com.ts.dagger.di.module.MainModule;
+import com.ts.dagger.di.module.UserModule;
+import com.ts.dagger.presenter.IView;
+import com.ts.dagger.presenter.LoginPresenter;
 
 import java.util.Date;
 
 import javax.inject.Inject;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements IView {
     public static final String TAG = "LoginActivity";
 
 //    @Dev
@@ -42,11 +45,15 @@ public class LoginActivity extends AppCompatActivity {
     @Inject
     Manager dataManager;
 
+    @Inject
+    LoginPresenter mLoginPresenter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DaggerUserComponent.builder()
+                .userModule(new UserModule(this))
                 .appComponent(((MyApp)getApplication()).getAppComponent())
 //                .mainModule(new MainModule(this))
                 .build().inject(this);
@@ -54,7 +61,13 @@ public class LoginActivity extends AppCompatActivity {
         Debug.d(TAG,e+"");
         Debug.d(TAG,dataManager+"");
         dataManager.manage();
+        mLoginPresenter.login();
 //        com.ts.dagger.debug.Debug.d(TAG,d+"");
 //        com.ts.dagger.debug.Debug.d(TAG,d1+"");
+    }
+
+    @Override
+    public void show() {
+        Debug.d(TAG,"show");
     }
 }
